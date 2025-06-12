@@ -1,5 +1,4 @@
 import json
-from copy import copy, deepcopy
 
 class Exercitiu:
 	def __init__(self, enunt, rasp):
@@ -9,7 +8,6 @@ class Exercitiu:
 
 class Subiect:
 	def __init__(self, path):
-
 		self.exercitii = []
 
 		with open(path, 'r') as file:
