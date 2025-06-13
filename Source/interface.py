@@ -35,10 +35,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		self.meniu2 = SecondMenu()
 		self.stack.addWidget(self.meniu2)
+		self.back_button = self.meniu2.ui.back 
+		self.back_button.clicked.connect(self.back)
 
 	def start(self):
 		self.show_menu(self.meniu2)
 	
+	def back(self):
+		self.show_menu(self.meniu1)
+
 	def show_menu(self, menu):
 		self.stack.setCurrentWidget(menu)	
 
@@ -46,6 +51,10 @@ def render():
 	app = QtWidgets.QApplication(sys.argv)
 
 	window = MainWindow()
+
+	window.setFixedWidth(800)
+	window.setFixedHeight(600) 
+
 	window.show()
 
 	app.exec_()
