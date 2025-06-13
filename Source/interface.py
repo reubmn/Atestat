@@ -1,23 +1,52 @@
 import sys 
 from PyQt5 import QtWidgets, uic
+from UI import meniu_principal, meniu_secundar
 
-class Meniu(QtWidgets.QMainWindow):
+class MainMenu(QtWidgets.QWidget):
 	def __init__(self):
-		super(Meniu, self).__init__()
-		uic.loadUi('UI/Meniu.ui', self)
+		super().__init__()
+	
+		# Load widget class from .py
 
-class meniu2(QtWidgets.QMainWindow):
+		self.ui = meniu_principal.Ui_MeniuPrincipal()
+		self.ui.setupUi(self) 
+
+class SecondMenu(QtWidgets.QWidget):
 	def __init__(self):
-		super(meniu2, self).__init__()
-		uic.loadUi('UI/meniu2.ui', self)
+		super().__init__()
+		self.ui = meniu_secundar.Ui_MeniuSecundar()
+		self.ui.setupUi(self)
+		
+
+class MainWindow(QtWidgets.QMainWindow):
+	def __init__(self):
+		super().__init__()
+		self.stack = QtWidgets.QStackedWidget()
+		self.setCentralWidget(self.stack)
+
+		# Menu1
+
+		self.meniu1 = MainMenu()
+		self.start_button = self.meniu1.ui.buton
+		self.start_button.clicked.connect(self.start)
+		self.stack.addWidget(self.meniu1)
+		
+		# Menu2
+
+		self.meniu2 = SecondMenu()
+		self.stack.addWidget(self.meniu2)
+
+	def start(self):
+		self.show_menu(self.meniu2)
+	
+	def show_menu(self, menu):
+		self.stack.setCurrentWidget(menu)	
 
 def render():
 	app = QtWidgets.QApplication(sys.argv)
 
-	meniu = Meniu()
-	Meniu2 = meniu2()
-
-	
+	window = MainWindow()
+	window.show()
 
 	app.exec_()
 
