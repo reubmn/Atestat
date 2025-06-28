@@ -1,13 +1,18 @@
 {
-	"1":
+	"titlu" : "UBB Informatica August 2024",
+
+	"Exercitii" :
 	{
-		"Enunt" : " Se consideră algoritmul decide(n, x), unde n este număr natural (1 <= n<= 104), iar x este un vector cu n elemente numere întregi (x[1], x[2], ..., x[n], unde -100 <= x[i] <= 100, pentru i = 1, 2, ..., n): \n Algorithm decide(n, x): \n b <- True \n i <- 1 \n While b AND (i < n) execute \n b <- (x[i] < x[i + 1]) \n i <- i + 1 \n EndWhile \n Return b \n EndAlgorithm \n\n ",
-		"Raspunsuri" : ["A", "B"]
-	},
-	"2":
-	{
-		"Enunt" : "Scrie altceva",
-		"Raspunsuri" : ["C", "D"]
+		"1":
+		{
+			"Enunt" : " Se consideră algoritmul decide(n, x), unde n este număr natural (1 <= n<= 104), iar x este un vector cu n elemente numere întregi (x[1], x[2], ..., x[n], unde -100 <= x[i] <= 100, pentru i = 1, 2, ..., n): \n Algorithm decide(n, x): \n b <- True \n i <- 1 \n While b AND (i < n) execute \n b <- (x[i] < x[i + 1]) \n i <- i + 1 \n EndWhile \n Return b \n EndAlgorithm \n\n ",
+			"Raspunsuri" : ["A", "B"]
+		},
+		"2":
+		{
+			"Enunt" : "Scrie altceva",
+			"Raspunsuri" : ["C", "D"]
+		}
 	}
 
 }

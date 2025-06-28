@@ -8,8 +8,12 @@ class MainWindow(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
 
-		self.stack = QtWidgets.QStackedWidget() 
-		self.setCentralWidget(self.stack)
+	
+		self.stack = QtWidgets.QStackedLayout() 
+		self.central_widget = QtWidgets.QWidget()
+		self.central_widget.setLayout(self.stack)
+		self.setCentralWidget(self.central_widget)
+
 		# Menu1
 
 		self.wmeniu1 = QtWidgets.QWidget()

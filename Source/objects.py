@@ -7,24 +7,35 @@ class Exercitiu(QtWidgets.QWidget):
 		self.raspunsuri_corecte = rasp
 		self.raspunsuri_user = []
 
-	def setupUi(self, Form, x, y):
+	def setupUi(self, Form):
 		Form.setObjectName("Form")
 		Form.resize(500, 200)
-		self.enunt = QtWidgets.QLabel(Form)
-		self.enunt.setGeometry(QtCore.QRect(x+30, y+20, 431, 51))
+
+		self.layout = QtWidgets.QVBoxLayout()
+		Form.setLayout(self.layout)
+
+		self.enunt = QtWidgets.QLabel(self.enunt)
 		self.enunt.setObjectName("enunt")
+		self.enunt.setWordWrap(True)
+		self.layout.addWidget(self.enunt)
+
+		self.options = QtWidgets.QHBoxLayout()
+
 		self.A = QtWidgets.QCheckBox(Form)
-		self.A.setGeometry(QtCore.QRect(x+60, y+140, 82, 23))
 		self.A.setObjectName("A")
 		self.B = QtWidgets.QCheckBox(Form)
-		self.B.setGeometry(QtCore.QRect(x+160, y+140, 82, 23))
 		self.B.setObjectName("B")
 		self.C = QtWidgets.QCheckBox(Form)
-		self.C.setGeometry(QtCore.QRect(x+260, y+140, 82, 23))
 		self.C.setObjectName("C")
 		self.D = QtWidgets.QCheckBox(Form)
-		self.D.setGeometry(QtCore.QRect(x+370, y+140, 82, 23))
 		self.D.setObjectName("D")
+
+		self.options.addWidget(self.A)
+		self.options.addWidget(self.B)
+		self.options.addWidget(self.C)
+		self.options.addWidget(self.D)
+
+		self.layout.addLayout(self.options)
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -32,7 +43,6 @@ class Exercitiu(QtWidgets.QWidget):
 	def retranslateUi(self, Form):
 		_translate = QtCore.QCoreApplication.translate
 		Form.setWindowTitle(_translate("Form", "Form"))
-		self.enunt.setText(_translate("Form", "Enunt"))
 		self.A.setText(_translate("Form", "A"))
 		self.B.setText(_translate("Form", "B"))
 		self.C.setText(_translate("Form", "C"))
@@ -44,12 +54,13 @@ class Subiect(QtWidgets.QWidget):
 		super().__init__()
 
 		self.exercitii = []
-
+	
 		with open(path, 'r') as file:
 			data = json.load(file)
+			self.titlu = data["titlu"]
 
-			for i in data:
-				ex = Exercitiu(data[i]["Enunt"], data[i]["Raspunsuri"])
+			for i in data["Exercitii"]:
+				ex = Exercitiu(data["Exercitii"][i]["Enunt"], data["Exercitii"][i]["Raspunsuri"])
 				ex.raspunsuri_user = []
 
 				self.exercitii.append(ex)
@@ -58,17 +69,20 @@ class Subiect(QtWidgets.QWidget):
 	
 		Subiect.setObjectName("Subiect")
 		Subiect.resize(580, 880)
-		self.titlu = QtWidgets.QLabel(Subiect)
-		self.titlu.setGeometry(QtCore.QRect(210, 30, 161, 81))
+		
+		self.layout = QtWidgets.QVBoxLayout()
+		Subiect.setLayout(self.layout)
+
+		self.titlu = QtWidgets.QLabel(self.titlu)
 		self.titlu.setObjectName("titlu")
+		self.layout.addWidget(self.titlu)
 
-		self.retranslateUi(Subiect)
+		for i in self.exercitii:
+			w = QtWidgets.QWidget()
+			i.setupUi(w)
+			self.layout.addWidget(w, stretch = 1)
+	
 		QtCore.QMetaObject.connectSlotsByName(Subiect)
-
-	def retranslateUi(self, Subiect):
-		_translate = QtCore.QCoreApplication.translate
-		Subiect.setWindowTitle(_translate("Subiect", "Subiect"))
-		self.titlu.setText(_translate("Subiect", "Titlu"))
 
 class Ui_MeniuPrincipal(QtWidgets.QWidget):
 	def setupUi(self, MeniuPrincipal):
