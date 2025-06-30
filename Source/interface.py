@@ -35,14 +35,20 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.stack.addWidget(self.wmeniu2)
 
 		self.meniu2.back.clicked.connect(self.back)
-		self.meniu2.subiect_button.clicked.connect(lambda : self.change_page(self.wsub))
+		self.meniu2.subiect_button.clicked.connect(lambda : self.change_page(self.scroll))
 
 		# Subiect 
 		
 		self.wsub = QtWidgets.QWidget()
 		self.sub = obj.Subiect("Subiecte/UBB/Info/2024/august.json")
 		self.sub.setupUi(self.wsub)	
-		self.stack.addWidget(self.wsub)	
+
+		self.scroll = QtWidgets.QScrollArea()
+		self.scroll.setWidgetResizable(True)
+		self.scroll.setWidget(self.wsub)
+		self.scroll.setFixedHeight(800)
+
+		self.stack.addWidget(self.scroll)	
 
 	def change_page(self, widget):
 		last.append(self.stack.currentIndex())

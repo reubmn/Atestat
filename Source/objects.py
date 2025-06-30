@@ -69,8 +69,9 @@ class Subiect(QtWidgets.QWidget):
 	
 		Subiect.setObjectName("Subiect")
 		Subiect.resize(580, 880)
-		
+	
 		self.layout = QtWidgets.QVBoxLayout()
+		self.layout.addStretch(True)
 		Subiect.setLayout(self.layout)
 
 		self.titlu = QtWidgets.QLabel(self.titlu)
