@@ -1,4 +1,6 @@
 import json
+import os
+import objects as obj
 from PyQt5 import QtWidgets, QtCore
 
 class Exercitiu(QtWidgets.QWidget):
@@ -85,6 +87,47 @@ class Subiect(QtWidgets.QWidget):
 	
 		QtCore.QMetaObject.connectSlotsByName(Subiect)
 
+class Page(QtWidgets.QWidget):
+	def __init__(self, path, stack):
+		super().__init__()
+		self.path = path	
+		self.stack = stack
+	
+
+	def setupUi(self, Page):
+		self.layout = QtWidgets.QVBoxLayout()
+		Page.setLayout(self.layout)
+		
+		for i in os.listdir(self.path):
+			b = QtWidgets.QPushButton(i)
+			b.clicked.connect(lambda : self.open_dir(i))
+			self.layout.addWidget(b)
+	
+	def open_dir(self, dir_name):
+		
+		if 'json' in dir_name:
+			wsub = QtWidgets.QWidget() 
+			sub = obj.Subiect("Subiecte/UBB/Info/2024/august.json") 
+			
+			sub.setupUi(wsub)     
+	 
+			scroll = QtWidgets.QScrollArea() 
+			scroll.setWidgetResizable(True) 
+			scroll.setWidget(wsub) 
+			scroll.setFixedHeight(800) 
+	 
+			self.stack.addWidget(scroll)   
+			self.stack.setCurrentWidget(scroll) 
+		else:	
+			self.path = self.path + '/' + dir_name
+			page = Page(self.path, self.stack)
+			wpage = QtWidgets.QWidget()
+			page.setupUi(wpage)
+
+			self.stack.addWidget(wpage)
+			self.stack.setCurrentWidget(wpage)
+	
+
 class Ui_MeniuPrincipal(QtWidgets.QWidget):
 	def setupUi(self, MeniuPrincipal):
 
@@ -95,11 +138,11 @@ class Ui_MeniuPrincipal(QtWidgets.QWidget):
 		self.titlu.setGeometry(QtCore.QRect(50, 110, 771, 111))
 		self.titlu.setObjectName("titlu")
 
-		self.buton = QtWidgets.QPushButton(MeniuPrincipal)
-		self.buton.setGeometry(QtCore.QRect(300, 310, 180, 90))
-		self.buton.setFixedSize(180, 90)
-		self.buton.setStyleSheet("font: 36pt \"Sans Serif\";")
-		self.buton.setObjectName("buton")
+		self.button = QtWidgets.QPushButton(MeniuPrincipal)
+		self.button.setGeometry(QtCore.QRect(300, 310, 180, 90))
+		self.button.setFixedSize(180, 90)
+		self.button.setStyleSheet("font: 36pt \"Sans Serif\";")
+		self.button.setObjectName("button")
 
 		self.retranslateUi(MeniuPrincipal)
 		QtCore.QMetaObject.connectSlotsByName(MeniuPrincipal)
@@ -108,35 +151,4 @@ class Ui_MeniuPrincipal(QtWidgets.QWidget):
 		_translate = QtCore.QCoreApplication.translate
 		MeniuPrincipal.setWindowTitle(_translate("MeniuPrincipal", "Form"))
 		self.titlu.setText(_translate("MeniuPrincipal", "<html><head/><body><p><span style=\" font-size:72pt;\">Meniu Princpial</span></p><p><br/></p></body></html>"))
-		self.buton.setText(_translate("MeniuPrincipal", "Buton"))
-
-
-
-class Ui_MeniuSecundar(QtWidgets.QWidget):
-	def setupUi(self, MeniuSecundar):
-		MeniuSecundar.setObjectName("MeniuSecundar")
-		MeniuSecundar.resize(800, 600)
-
-		self.scris = QtWidgets.QLabel(MeniuSecundar)
-		self.scris.setGeometry(QtCore.QRect(200, 40, 461, 281))
-		self.scris.setObjectName("scris")
-		
-		self.back = QtWidgets.QPushButton(MeniuSecundar)
-		self.back.setGeometry(QtCore.QRect(50, 520, 131, 41))
-		self.back.setStyleSheet("font: 24pt \"Sans Serif\";")
-		self.back.setObjectName("back")
-		
-		self.subiect_button = QtWidgets.QPushButton(MeniuSecundar)
-		self.subiect_button.setGeometry(QtCore.QRect(330, 280, 121, 41))
-		self.subiect_button.setObjectName("subiect_button")
-
-		self.retranslateUi(MeniuSecundar)
-		QtCore.QMetaObject.connectSlotsByName(MeniuSecundar)
-
-	def retranslateUi(self, MeniuSecundar):
-		_translate = QtCore.QCoreApplication.translate
-		MeniuSecundar.setWindowTitle(_translate("MeniuSecundar", "Form"))
-		self.scris.setText(_translate("MeniuSecundar", "<html><head/><body><p><span style=\" font-size:36pt;\">Meniu Secundar</span></p></body></html>"))
-		self.back.setText(_translate("MeniuSecundar", "Back"))
-		self.subiect_button.setText(_translate("MeniuSecundar", "Subiect"))
-		
+		self.button.setText(_translate("MeniuPrincipal", "Button"))
