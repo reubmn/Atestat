@@ -31,9 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		# Start creating pages
 
 		page = obj.Page('.', self.stack)
-		page.open_dir('Subiecte')
-
-	
+		page.open_dir('Subiecte')	
 
 	def back(self):
 		if len(last) > 0:

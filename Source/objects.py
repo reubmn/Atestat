@@ -23,13 +23,13 @@ class Exercitiu(QtWidgets.QWidget):
 
 		self.options = QtWidgets.QHBoxLayout()
 
-		self.A = QtWidgets.QCheckBox(Form)
+		self.A = QtWidgets.QCheckBox('A')
 		self.A.setObjectName("A")
-		self.B = QtWidgets.QCheckBox(Form)
+		self.B = QtWidgets.QCheckBox('B')
 		self.B.setObjectName("B")
-		self.C = QtWidgets.QCheckBox(Form)
+		self.C = QtWidgets.QCheckBox('C')
 		self.C.setObjectName("C")
-		self.D = QtWidgets.QCheckBox(Form)
+		self.D = QtWidgets.QCheckBox('D')
 		self.D.setObjectName("D")
 
 		self.options.addWidget(self.A)
@@ -39,24 +39,18 @@ class Exercitiu(QtWidgets.QWidget):
 
 		self.layout.addLayout(self.options)
 
-		self.retranslateUi(Form)
-		QtCore.QMetaObject.connectSlotsByName(Form)
-	
-	def retranslateUi(self, Form):
-		_translate = QtCore.QCoreApplication.translate
-		Form.setWindowTitle(_translate("Form", "Form"))
-		self.A.setText(_translate("Form", "A"))
-		self.B.setText(_translate("Form", "B"))
-		self.C.setText(_translate("Form", "C"))
-		self.D.setText(_translate("Form", "D"))
+		QtCore.QMetaObject.connectSlotsByName(Form)	
+
+last = []
 
 class Subiect(QtWidgets.QWidget):
-	def __init__(self, path):
+	def __init__(self, path, stack):
 		
 		super().__init__()
 
 		self.exercitii = []
-	
+		self.stack = stack	
+
 		with open(path, 'r') as file:
 			data = json.load(file)
 			self.titlu = data["titlu"]
@@ -86,13 +80,11 @@ class Subiect(QtWidgets.QWidget):
 			self.layout.addWidget(w, stretch = 1)
 	
 		QtCore.QMetaObject.connectSlotsByName(Subiect)
-
 class Page(QtWidgets.QWidget):
 	def __init__(self, path, stack):
 		super().__init__()
 		self.path = path	
 		self.stack = stack
-	
 
 	def setupUi(self, Page):
 		self.layout = QtWidgets.QVBoxLayout()
@@ -102,22 +94,37 @@ class Page(QtWidgets.QWidget):
 			b = QtWidgets.QPushButton(i)
 			b.clicked.connect(lambda : self.open_dir(i))
 			self.layout.addWidget(b)
-	
-	def open_dir(self, dir_name):
 		
+		self.back = QtWidgets.QPushButton("Back")
+		self.back.clicked.connect(self.back_func)
+		self.layout.addWidget(self.back)
+
+	def open_dir(self, dir_name):
+	
+		last.append(self.stack.currentWidget())	
+	
 		if 'json' in dir_name:
 			wsub = QtWidgets.QWidget() 
-			sub = obj.Subiect("Subiecte/UBB/Info/2024/august.json") 
+			sub = obj.Subiect("Subiecte/UBB/Info/2024/august.json", self.stack) 
 			
 			sub.setupUi(wsub)     
-	 
+			
+			central_widget = QtWidgets.QWidget()
+			layout = QtWidgets.QVBoxLayout()
+			central_widget.setLayout(layout)
+ 
 			scroll = QtWidgets.QScrollArea() 
 			scroll.setWidgetResizable(True) 
 			scroll.setWidget(wsub) 
-			scroll.setFixedHeight(800) 
+			scroll.setFixedHeight(700) 
 	 
-			self.stack.addWidget(scroll)   
-			self.stack.setCurrentWidget(scroll) 
+			back = QtWidgets.QPushButton("Back")
+			back.clicked.connect(self.back_func)
+
+			layout.addWidget(scroll)
+			layout.addWidget(back)
+			self.stack.addWidget(central_widget)   
+			self.stack.setCurrentWidget(central_widget) 
 		else:	
 			self.path = self.path + '/' + dir_name
 			page = Page(self.path, self.stack)
@@ -127,6 +134,9 @@ class Page(QtWidgets.QWidget):
 			self.stack.addWidget(wpage)
 			self.stack.setCurrentWidget(wpage)
 	
+	def back_func(self):
+		self.stack.setCurrentWidget(last[len(last)-1])
+		last.pop()
 
 class Ui_MeniuPrincipal(QtWidgets.QWidget):
 	def setupUi(self, MeniuPrincipal):
