@@ -80,6 +80,7 @@ class Subiect(QtWidgets.QWidget):
 			self.layout.addWidget(w, stretch = 1)
 	
 		QtCore.QMetaObject.connectSlotsByName(Subiect)
+
 class Page(QtWidgets.QWidget):
 	def __init__(self, path, stack):
 		super().__init__()
@@ -89,23 +90,26 @@ class Page(QtWidgets.QWidget):
 	def setupUi(self, Page):
 		self.layout = QtWidgets.QVBoxLayout()
 		Page.setLayout(self.layout)
-		
+
 		for i in os.listdir(self.path):
 			b = QtWidgets.QPushButton(i)
-			b.clicked.connect(lambda : self.open_dir(i))
+
+			b.clicked.connect(lambda checked, x = i : self.open_dir(x))
 			self.layout.addWidget(b)
 		
 		self.back = QtWidgets.QPushButton("Back")
 		self.back.clicked.connect(self.back_func)
 		self.layout.addWidget(self.back)
 
-	def open_dir(self, dir_name):
-	
+	def open_dir(self, dir_name):		
+
 		last.append(self.stack.currentWidget())	
+		self.path = self.path
 	
 		if 'json' in dir_name:
+
 			wsub = QtWidgets.QWidget() 
-			sub = obj.Subiect("Subiecte/UBB/Info/2024/august.json", self.stack) 
+			sub = Subiect(self.path + '/' + dir_name, self.stack) 
 			
 			sub.setupUi(wsub)     
 			
@@ -126,8 +130,7 @@ class Page(QtWidgets.QWidget):
 			self.stack.addWidget(central_widget)   
 			self.stack.setCurrentWidget(central_widget) 
 		else:	
-			self.path = self.path + '/' + dir_name
-			page = Page(self.path, self.stack)
+			page = Page(self.path + '/' + dir_name, self.stack)
 			wpage = QtWidgets.QWidget()
 			page.setupUi(wpage)
 
@@ -135,8 +138,10 @@ class Page(QtWidgets.QWidget):
 			self.stack.setCurrentWidget(wpage)
 	
 	def back_func(self):
+		self.stack.removeWidget(self)
 		self.stack.setCurrentWidget(last[len(last)-1])
 		last.pop()
+		del self
 
 class Ui_MeniuPrincipal(QtWidgets.QWidget):
 	def setupUi(self, MeniuPrincipal):
