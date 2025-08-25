@@ -4,7 +4,7 @@ import os
 import sys
 
 def setup_directories():
-    dirs = ['users', 'Subiecte', 'analytics']
+    dirs = ['users', 'Subiecte', 'analytics', 'uploads', 'user_data']
     for dir_name in dirs:
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
