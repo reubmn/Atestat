@@ -1,0 +1,12 @@
+{
+    "username": "eu123",
+    "password": "14fa967591908217a14cd1b7b308caddb700f2d8b08a2c9c843e5b04be1b5b42",
+    "role": "admin",
+    "created_date": "2025-08-25",
+    "stats": {
+        "tests_taken": 0,
+        "total_score": 0,
+        "average_score": 0,
+        "test_history": []
+    }
+}

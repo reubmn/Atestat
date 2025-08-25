@@ -14,7 +14,7 @@ app = QtWidgets.QApplication(sys.argv)
 setup_directories()
 
 #incepe cu meniul de login (trebuie creeat)
-"""
+
 login_window = interface.LoginWindow()
 
 if login_window.exec_() == QtWidgets.QDialog.Accepted:
@@ -33,3 +33,4 @@ window.setFixedHeight(800)
 window.show()
 
 app.exec()
+"""
