@@ -11,12 +11,25 @@ def setup_directories():
 
 app = QtWidgets.QApplication(sys.argv)
 
+setup_directories()
+
+#incepe cu meniul de login (trebuie creeat)
+"""
+login_window = interface.LoginWindow()
+
+if login_window.exec_() == QtWidgets.QDialog.Accepted:
+    #login reusit, deschide fereastra principala
+    window = interface.MainWindow()
+    window.setFixedWidth(800)
+    window.setFixedHeight(800) 
+    window.show()
+    app.exec()
+"""
 window = interface.MainWindow()
 
 window.setFixedWidth(800)
 window.setFixedHeight(800) 
 
-setup_directories()
 window.show()
 
 app.exec()
