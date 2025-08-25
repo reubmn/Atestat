@@ -15,7 +15,7 @@ class LoginWindow(QtWidgets.QDialog):
     def setupUi(self):
         self.setObjectName("LoginDialog")
         self.setFixedSize(400, 300)
-        self.setWindowTitle("Login - Atestat Project")
+        self.setWindowTitle("Login")
         
         layout = QtWidgets.QVBoxLayout()
         
