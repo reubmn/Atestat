@@ -44,6 +44,15 @@
             "percentage": 0.0,
             "test_title": "UBB Informatica Iunie 2024",
             "timestamp": "2025-08-28 19:57:55"
+        },
+        {
+            "user": "eu123",
+            "test_name": "testdetest",
+            "score": 0,
+            "max_score": 1,
+            "percentage": 0.0,
+            "test_title": "testdetest",
+            "timestamp": "2025-08-28 20:00:17"
         }
     ]
 }

@@ -4,9 +4,9 @@
     "role": "admin",
     "created_date": "2025-08-25",
     "stats": {
-        "tests_taken": 2,
+        "tests_taken": 3,
         "total_score": 100.0,
-        "average_score": 50.0,
+        "average_score": 33.333333333333336,
         "test_history": [
             {
                 "date": "2025-08-28 17:52:05",
@@ -18,6 +18,12 @@
                 "date": "2025-08-28 19:57:55",
                 "score": 0,
                 "max_score": 6,
+                "percentage": 0.0
+            },
+            {
+                "date": "2025-08-28 20:00:17",
+                "score": 0,
+                "max_score": 1,
                 "percentage": 0.0
             }
         ]

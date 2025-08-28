@@ -170,7 +170,6 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.current_user = current_user
         
-        
         self.stack = QtWidgets.QStackedLayout() 
         self.central_widget = QtWidgets.QWidget()
         self.central_widget.setLayout(self.stack)
@@ -237,13 +236,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         login_window = LoginWindow()
         if login_window.exec_() == QtWidgets.QDialog.Accepted:
-             window = MainWindow(login_window.current_user)
-             window.setFixedWidth(800)
-             window.setFixedHeight(800) 
-             window.show()
-             app.exec()
-        
-        
+              self.show()
+
     def start_tests(self):
         last.append(self.meniu1)
         page = obj.Page('.', self.stack, self.current_user)
