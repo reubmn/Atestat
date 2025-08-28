@@ -19,7 +19,7 @@ login_window = interface.LoginWindow()
 
 if login_window.exec_() == QtWidgets.QDialog.Accepted:
     #login reusit, deschide fereastra principala
-    window = interface.MainWindow()
+    window = interface.MainWindow(login_window.current_user)
     window.setFixedWidth(800)
     window.setFixedHeight(800) 
     window.show()
@@ -34,3 +34,10 @@ window.show()
 
 app.exec()
 """
+
+    """
+    trebuie sa fac ca la logout sa se deschida fereastra de login
+    
+    
+    
+    """

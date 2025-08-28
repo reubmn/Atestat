@@ -1,0 +1,19 @@
+{
+    "username": "eustudent",
+    "password": "c68323ada1d6e0e14788d937a469762f1738cb91f7303c1d4e53457cbe2a3868",
+    "role": "student",
+    "created_date": "2025-08-28",
+    "stats": {
+        "tests_taken": 1,
+        "total_score": 33.33333333333333,
+        "average_score": 33.33333333333333,
+        "test_history": [
+            {
+                "date": "2025-08-28 17:26:44",
+                "score": 2,
+                "max_score": 6,
+                "percentage": 33.33333333333333
+            }
+        ]
+    }
+}

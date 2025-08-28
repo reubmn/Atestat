@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, uic , QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 import objects as obj
 import auth
 import json
@@ -166,28 +166,123 @@ class RegisterDialog(QtWidgets.QDialog):
 
 
 class MainWindow(QtWidgets.QMainWindow):
-	def __init__(self):
-		super().__init__()
-	
-		self.stack = QtWidgets.QStackedLayout() 
-		self.central_widget = QtWidgets.QWidget()
-		self.central_widget.setLayout(self.stack)
-		self.setCentralWidget(self.central_widget)
+    def __init__(self, current_user):
+        super().__init__()
+        self.current_user = current_user
+        
+        
+        self.stack = QtWidgets.QStackedLayout() 
+        self.central_widget = QtWidgets.QWidget()
+        self.central_widget.setLayout(self.stack)
+        self.setCentralWidget(self.central_widget)
 
+        self.setup_menu_bar()
+        
 		# Menu
 
-		self.wmeniu1 = QtWidgets.QWidget()
-		self.meniu1 = obj.Ui_MeniuPrincipal()
-		self.meniu1.setupUi(self.wmeniu1)
+        self.wmeniu1 = QtWidgets.QWidget()
+        self.meniu1 = obj.Ui_MeniuPrincipal(self.current_user)
+        self.meniu1.setupUi(self.wmeniu1)
 	
-		self.stack.addWidget(self.wmeniu1)
-		self.meniu1.button.clicked.connect(self.start)		
+        self.stack.addWidget(self.wmeniu1)
+        self.meniu1.start_button.clicked.connect(self.start_tests)
+        if hasattr(self.meniu1, 'upload_button'):
+            self.meniu1.upload_button.clicked.connect(self.show_upload_dialog)
 
-	def start(self):
-		last.append(self.meniu1)
-		# Start creating pages
+        if hasattr(self.meniu1, 'analytics_button'):
+            self.meniu1.analytics_button.clicked.connect(self.show_analytics)
+        
+        
+        
+    def setup_menu_bar(self):
+        menubar = self.menuBar()
+        
+        user_menu = menubar.addMenu('User')
+        
+        profile_action = QtWidgets.QAction('Profile', self)
+        profile_action.triggered.connect(self.show_profile)
+        user_menu.addAction(profile_action)
+        
+        logout_action = QtWidgets.QAction('Logout', self)
+        logout_action.triggered.connect(self.logout)
+        user_menu.addAction(logout_action)
+        
+        if self.current_user['role'] in ['admin', 'teacher']:
+            admin_menu = menubar.addMenu('Admin')
+            
+            upload_action = QtWidgets.QAction('Upload Tests', self)
+            upload_action.triggered.connect(self.show_upload_dialog)
+            admin_menu.addAction(upload_action)
+            
+            analytics_action = QtWidgets.QAction('Analytics', self)
+            analytics_action.triggered.connect(self.show_analytics)
+            admin_menu.addAction(analytics_action)
+            
+    def show_profile(self):
+        dialog = ProfileDialog(self.current_user, self)
+        dialog.exec_()
+        
+    def logout(self):
+        self.close()
+        
+        
+    def start_tests(self):
+        last.append(self.meniu1)
+        page = obj.Page('.', self.stack, self.current_user)
+        page.open_dir('Subiecte')
+        
+    def show_upload_dialog(self):
+        if self.current_user['role'] not in ['admin', 'teacher']:
+            QtWidgets.QMessageBox.warning(self, "Access Denied", 
+                                        "You don't have permission to upload files.")
+            return
+            
+        dialog = obj.UploadDialog(self)
+        dialog.exec_()
+        
+    def show_analytics(self):
+        if self.current_user['role'] not in ['admin', 'teacher']:
+            QtWidgets.QMessageBox.warning(self, "Access Denied", 
+                                        "You don't have permission to view analytics.")
+            return
+            
+        dialog = obj.AnalyticsDialog(self.current_user, self)
+        dialog.exec_()
+        
+        
+        
+class ProfileDialog(QtWidgets.QDialog):
+    def __init__(self, user, parent=None):
+        super().__init__(parent)
+        self.user = user
+        self.setupUi()
+        
+    def setupUi(self):
+        self.setWindowTitle("User Profile")
+        self.setFixedSize(400, 300)
+        
+        layout = QtWidgets.QVBoxLayout()
+        
+        title = QtWidgets.QLabel("User Profile")
+        title.setAlignment(QtCore.Qt.AlignCenter)
+        title.setStyleSheet("font-size: 20px; font-weight: bold; margin: 15px;")
+        layout.addWidget(title)
+        
+        
+        info_layout = QtWidgets.QFormLayout()
+        info_layout.addRow("Username:", QtWidgets.QLabel(self.user['username']))
+        info_layout.addRow("Role:", QtWidgets.QLabel(self.user['role']))
+        info_layout.addRow("Member since:", QtWidgets.QLabel(self.user['created_date']))
+        info_layout.addRow("Tests taken:", QtWidgets.QLabel(str(self.user['stats']['tests_taken'])))
+        info_layout.addRow("Average score:", QtWidgets.QLabel(f"{self.user['stats']['average_score']:.1f}%"))
+        
+        layout.addLayout(info_layout)
+        
+        close_btn = QtWidgets.QPushButton("Close")
+        close_btn.clicked.connect(self.accept)
+        layout.addWidget(close_btn)
+        
+        self.setLayout(layout)
 
-		page = obj.Page('.', self.stack)
-		page.open_dir('Subiecte')	
 
 
