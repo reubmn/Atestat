@@ -203,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
         profile_action.triggered.connect(self.show_profile)
         user_menu.addAction(profile_action)
         
-        logout_action = QtWidgets.QAction('Logout', self)
+        logout_action = QtWidgets.QAction('Exit', self)
         logout_action.triggered.connect(self.logout)
         user_menu.addAction(logout_action)
         
