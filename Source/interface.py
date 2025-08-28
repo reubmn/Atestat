@@ -203,9 +203,13 @@ class MainWindow(QtWidgets.QMainWindow):
         profile_action.triggered.connect(self.show_profile)
         user_menu.addAction(profile_action)
         
-        logout_action = QtWidgets.QAction('Exit', self)
+        logout_action = QtWidgets.QAction('Logout', self)
         logout_action.triggered.connect(self.logout)
         user_menu.addAction(logout_action)
+        
+        exit_action = QtWidgets.QAction('Exit', self)
+        exit_action.triggered.connect(self.exit)
+        user_menu.addAction(exit_action)
         
         if self.current_user['role'] in ['admin', 'teacher']:
             admin_menu = menubar.addMenu('Admin')
@@ -222,8 +226,22 @@ class MainWindow(QtWidgets.QMainWindow):
         dialog = ProfileDialog(self.current_user, self)
         dialog.exec_()
         
+    def exit(self):
+        self.close()
+        
     def logout(self):
         self.close()
+        if last:
+            last[-1].show()
+            last.pop()
+        else:
+            login_window = LoginWindow()
+            if login_window.exec_() == QtWidgets.QDialog.Accepted:
+                window = MainWindow(login_window.current_user)
+                window.setFixedWidth(800)
+                window.setFixedHeight(800) 
+                window.show()
+                app.exec()
         
         
     def start_tests(self):
