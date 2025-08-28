@@ -35,9 +35,19 @@ window.show()
 app.exec()
 """
 
-    """
+"""
     trebuie sa fac ca la logout sa se deschida fereastra de login
-    git
+    
+    sa se deschida windowurile mai natural si sa fie full screen 
+    
+    informatile sa fie stocate intr-un server
+    
+    analytics sa aiba grafice care arata bine
+    
+    sa se poata pune exercitile in categorii
+    
+    sa se poata incarca exercitii in alte forme decat json si manual
     
     
-    """
+    
+"""
