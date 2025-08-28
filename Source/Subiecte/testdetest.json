@@ -1,0 +1,18 @@
+{
+    "titlu": "testdetest",
+    "Exercitii": {
+        "1": {
+            "Enunt": "Raspunsul corect este A si B.",
+            "Raspunsuri": [
+                "A",
+                "B"
+            ],
+            "Options": {
+                "A": "A",
+                "B": "B",
+                "C": "C",
+                "D": "D"
+            }
+        }
+    }
+}
