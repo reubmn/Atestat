@@ -37,7 +37,7 @@ app.exec()
 
     """
     trebuie sa fac ca la logout sa se deschida fereastra de login
-    
+    git
     
     
     """
