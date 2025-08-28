@@ -231,17 +231,17 @@ class MainWindow(QtWidgets.QMainWindow):
         
     def logout(self):
         self.close()
-        if last:
-            last[-1].show()
+
+        while len(last):
             last.pop()
-        else:
-            login_window = LoginWindow()
-            if login_window.exec_() == QtWidgets.QDialog.Accepted:
-                window = MainWindow(login_window.current_user)
-                window.setFixedWidth(800)
-                window.setFixedHeight(800) 
-                window.show()
-                app.exec()
+        
+        login_window = LoginWindow()
+        if login_window.exec_() == QtWidgets.QDialog.Accepted:
+             window = MainWindow(login_window.current_user)
+             window.setFixedWidth(800)
+             window.setFixedHeight(800) 
+             window.show()
+             app.exec()
         
         
     def start_tests(self):
