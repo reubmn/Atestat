@@ -171,7 +171,7 @@ class Page(QtWidgets.QWidget):
         self.layout = QtWidgets.QVBoxLayout()
         Page.setLayout(self.layout)
         
-        title = QtWidgets.QLabel("Available Tests")
+        title = QtWidgets.QLabel(self.path[11:])
         title.setStyleSheet("font-size: 20px; font-weight: bold; text-align: center; padding: 15px;")
         title.setAlignment(QtCore.Qt.AlignCenter)
         self.layout.addWidget(title)
