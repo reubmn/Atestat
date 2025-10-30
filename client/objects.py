@@ -132,7 +132,6 @@ class Subiect(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(Subiect)
 
     def submit_test(self):
-        print("Button clicked")
         total_score = 0
         max_score = len(self.exercitii)
         
@@ -140,7 +139,10 @@ class Subiect(QtWidgets.QWidget):
             total_score += exercise.get_score()
         
         percentage = (total_score / max_score) * 100 if max_score > 0 else 0
-        
+       
+        self.current_user["stats"]["tests_taken"]+=1
+        self.current_user["stats"]["total_score"]+=percentage
+        self.current_user["stats"]["average_score"] = self.current_user["stats"]["total_score"] / self.current_user["stats"]["tests_taken"]
         auth.update_user_stats(self.current_user['username'], total_score, max_score)
         
         analytics_data = {
@@ -149,7 +151,8 @@ class Subiect(QtWidgets.QWidget):
             "score": total_score,
             "max_score": max_score,
             "percentage": percentage,
-            "test_title": self.titlu
+            "test_title": self.titlu,
+			"time" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         auth.save_analytics_data(analytics_data)
         
@@ -779,9 +782,9 @@ class AnalyticsDialog(QtWidgets.QDialog):
         for i, record in enumerate(records):
             results_table.setItem(i, 0, QtWidgets.QTableWidgetItem(record.get('user', 'Unknown')))
             results_table.setItem(i, 1, QtWidgets.QTableWidgetItem(record.get('test_name', 'Unknown')))
-            results_table.setItem(i, 2, QtWidgets.QTableWidgetItem(f"{record.get('score', 0)}/{record.get('max_score', 0)}"))
+            results_table.setItem(i, 2, QtWidgets.QTableWidgetItem(f"{record.get('score', 0)}/{record.get('max_score', 1)}"))
             results_table.setItem(i, 3, QtWidgets.QTableWidgetItem(f"{record.get('percentage', 0):.1f}%"))
-            results_table.setItem(i, 4, QtWidgets.QTableWidgetItem(record.get('timestamp', 'Unknown')))
+            results_table.setItem(i, 4, QtWidgets.QTableWidgetItem(record.get('time', 'Unknown')))
 
         results_table.resizeColumnsToContents()
         layout.addWidget(results_table)

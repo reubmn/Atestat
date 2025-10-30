@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
 import interface
 import os
-import sys
+import sys 
 
 def setup_directories():
     dirs = ['users', 'Subiecte', 'analytics', 'uploads', 'user_data']
@@ -17,13 +17,19 @@ setup_directories()
 
 login_window = interface.LoginWindow()
 
-if login_window.exec_() == QtWidgets.QDialog.Accepted:
+while login_window.exec_() == QtWidgets.QDialog.Accepted:
     #login reusit, deschide fereastra principala
     window = interface.MainWindow(login_window.current_user)
     window.setFixedWidth(800)
     window.setFixedHeight(800) 
     window.show()
     app.exec()
+
+    
+    if(window.exit_message == "logged out"):
+        login_window = interface.LoginWindow()
+    else:
+        break
 """
 window = interface.MainWindow()
 

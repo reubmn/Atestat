@@ -68,6 +68,7 @@ class LoginWindow(QtWidgets.QDialog):
             return
             
         user = auth.authenticate_user(username, password)
+          
         if user:
             self.current_user = user
             self.accept()
@@ -80,6 +81,7 @@ class LoginWindow(QtWidgets.QDialog):
             self.status_label.setText("Registration successful! Please login.")
             self.status_label.setStyleSheet("color: green;")
             
+           
 
 class RegisterDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -154,9 +156,6 @@ class RegisterDialog(QtWidgets.QDialog):
             self.status_label.setText("Password must be at least 4 characters")
             return
         
-        if os.path.exists(f'users/{username}.json'):
-            self.status_label.setText("Username already exists")
-            return
         
         success = auth.create_user(username, password, role)
         if success:
@@ -168,6 +167,7 @@ class RegisterDialog(QtWidgets.QDialog):
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, current_user):
         super().__init__()
+        self.exit_message = "exit"
         self.current_user = current_user
         
         self.stack = QtWidgets.QStackedLayout() 
@@ -226,18 +226,15 @@ class MainWindow(QtWidgets.QMainWindow):
         dialog.exec_()
         
     def exit(self):
+        self.exit_message = "exit"
         self.close()
         
     def logout(self):
-        self.close()
-
         while len(last):
             last.pop()
-        
-        login_window = LoginWindow()
-        if login_window.exec_() == QtWidgets.QDialog.Accepted:
-              self.show()
 
+        self.exit_message = "logged out"
+        self.close()
     def start_tests(self):
         last.append(self.meniu1)
         page = obj.Page('.', self.stack, self.current_user)
