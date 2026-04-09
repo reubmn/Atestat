@@ -52,6 +52,42 @@ def create_user(param):
 	
 	return "success" #user added 
 
+def auth_user(comm):
+    name, comm = parse(comm)
+		
+    dbconn = sqlite3.connect("database.db")
+    cur = dbconn.cursor()
+
+    cur.execute(f"SELECT password FROM users WHERE username = \"{name}\";")		
+
+    res = cur.fetchone()
+    if res:
+        s = ""
+        for i in res[0]:
+            if i == ' ':
+                s+="_"
+            else:
+                s+=str(i) 
+
+        return s
+    else:
+        return "User not found"
+
+def get_user(comm): 
+	name, comm = parse(comm)	
+	
+	dbconn = sqlite3.connect("database.db")
+	cur = dbconn.cursor()
+
+	cur.execute(f"SELECT username,password,role,created_date,tests_taken,total_score,average_score FROM users WHERE username = \"{name}\";")
+	
+	user_list = cur.fetchone()
+	user_string = ""
+
+	for i in user_list: 
+		user_string += str(i) + '_' 
+	return user_string 
+
 def update_user(comm):
 	username, comm = parse(comm)
 	score, comm = parse(comm)
@@ -133,46 +169,37 @@ def get_analytics(conn):
 
 	return "done"
 
+def get_tests_by_user(name, conn):
+    dbconn = sqlite3.connect("database.db")
+    cur = dbconn.cursor() 
+    
+    name = name[:-1]
+    cur.execute(f"SELECT user, test_name, score, max_score, percentage, test_title, timestamp FROM records WHERE user = \"{name}\" LIMIT 1000;") 
+	
+    record_array = cur.fetchone() 
+
+    while record_array:
+        record_string = "" 
+        for i in record_array:
+            record_string += str(i) + "_"
+		 
+        send(record_string, conn) 
+        record_array = cur.fetchone() 
+	
+    cur.close()
+    dbconn.close()
+
+    return "done"
+
 def command(comm, conn):
 	s, comm = parse(comm) 
 
 	if s == "CREATEUSER":
 		return create_user(comm)
 	elif s == "AUTHUSER": 
-		name, comm = parse(comm)
-		
-		dbconn = sqlite3.connect("database.db")
-		cur = dbconn.cursor()
-
-		cur.execute(f"SELECT password FROM users WHERE username = \"{name}\";")		
-
-		res = cur.fetchone()
-		if res:
-			s = ""
-			for i in res[0]:
-				if i == ' ':
-					s+="_"
-				else:
-					s+=str(i) 
-
-			return s
-		else:
-			return "User not found"
+		return auth_user(comm)
 	elif s == "GETUSER":
-		name, comm = parse(comm)	
-	
-		dbconn = sqlite3.connect("database.db")
-		cur = dbconn.cursor()
-
-		cur.execute(f"SELECT username,password,role,created_date,tests_taken,total_score,average_score FROM users WHERE username = \"{name}\";")
-	
-		user_list = cur.fetchone()
-		user_string = ""
-
-		for i in user_list: 
-			user_string += str(i) + '_' 
-
-		return user_string 
+		return get_user(comm)
 	elif s == "UPDATEUSER":
 		update_user(comm)
 	elif s == "GETALLUSERS":
@@ -181,6 +208,8 @@ def command(comm, conn):
 		save_analytics(comm)
 	elif s == "GETANALYTICS":
 		return get_analytics(conn)
+	elif s == "GETTESTSBYUSER":
+		return get_tests_by_user(comm, conn)
 	
 def handle_client(conn, addr):
 	
@@ -209,5 +238,6 @@ def start():
 		conn, addr = server.accept()
 		thread = threading.Thread(target = handle_client, args = (conn, addr))
 		thread.start()
-start()
 
+start()
+server.close()

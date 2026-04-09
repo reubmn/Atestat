@@ -2,16 +2,16 @@
     "titlu": "testdetest",
     "Exercitii": {
         "1": {
-            "Enunt": "Raspunsul corect este A si B.",
+            "Enunt": "Care dintre următoarele variante sunt limbaje de programare?",
             "Raspunsuri": [
                 "A",
                 "B"
             ],
             "Options": {
-                "A": "A",
-                "B": "B",
-                "C": "C",
-                "D": "D"
+                "A": "Python",
+                "B": "C",
+                "C": "Powerpoint",
+                "D": "Bash"
             }
         }
     }

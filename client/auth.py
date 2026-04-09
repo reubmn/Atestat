@@ -200,3 +200,41 @@ def get_analytics_data():
 	except Exception as e:
 		print(f"Error getting analytics: {e}")
 		return {"records": []}
+
+def get_tests_by_user(name):
+    try:
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect(ADDR)
+		
+        send(f"GETTESTSBYUSER_{name}_", client)
+
+        res = []
+        analytics_string = recv(client) 
+
+        while analytics_string != "done":
+            analytics_array = [] 
+            s = "" 
+            for i in analytics_string:
+                if i == "_":
+                    analytics_array.append(s)
+                    s = "" 
+                else: 
+                    s+=i
+            analytics_string = recv(client)
+
+            analytics_data = {
+                    "user" : analytics_array[0], 
+                    "test_name" : analytics_array[1], 
+                    "score" : int(analytics_array[2]), 
+                    "max_score" : int(analytics_array[3]), 
+                    "percentage" : float(analytics_array[4]), 
+                    "test_title" : analytics_array[5],
+                    "time" : analytics_array[6]
+                    }	
+            
+            res.append(analytics_data)
+        return {"records" : res}
+
+    except Exception as e:
+        print(f"Error getting analytics: {e}")
+        return {"records": []}
