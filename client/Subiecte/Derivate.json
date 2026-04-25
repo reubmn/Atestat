@@ -1,0 +1,38 @@
+{
+    "titlu": "Derivate",
+    "Exercitii": {
+        "1": {
+            "Enunt": "e^x",
+            "Raspunsuri": [
+                "A"
+            ],
+            "Options": {
+                "A": "e^x",
+                "B": "-e^x",
+                "C": "lnx"
+            }
+        },
+        "2": {
+            "Enunt": "x^2",
+            "Raspunsuri": [
+                "B"
+            ],
+            "Options": {
+                "A": "4x",
+                "B": "2x",
+                "C": "3x"
+            }
+        },
+        "3": {
+            "Enunt": "fortnite",
+            "Raspunsuri": [],
+            "Options": {
+                "A": "0",
+                "B": "1",
+                "C": "",
+                "D": "",
+                "E": "4"
+            }
+        }
+    }
+}

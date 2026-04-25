@@ -542,34 +542,47 @@ class QuestionDialog(QtWidgets.QDialog):
         self.setWindowTitle("Add Question")
         self.setFixedSize(500, 450)
 
-        layout = QtWidgets.QVBoxLayout()
+        self.question_layout = QtWidgets.QVBoxLayout()
 
-        layout.addWidget(QtWidgets.QLabel("Question:"))
+        self.question_layout.addWidget(QtWidgets.QLabel("Question:"))
         self.question_input = QtWidgets.QTextEdit()
         self.question_input.setMaximumHeight(100)
-        layout.addWidget(self.question_input)
+        self.question_layout.addWidget(self.question_input)
 
-        layout.addWidget(QtWidgets.QLabel("Options:"))
-        
-        self.option_inputs = {}
-        for option in ['A', 'B', 'C', 'D']:
+		#Number of options 
+        self.question_layout.addWidget(QtWidgets.QLabel("Number of options")) 
+        noOptions = QtWidgets.QSpinBox()
+        noOptions.setRange(2, 10)
+        noOptions.valueChanged.connect(self.noOptionsChanged)
+        self.question_layout.addWidget(noOptions)
+
+		#Options 
+        self.question_layout.addWidget(QtWidgets.QLabel("Options:"))
+        self.options_layouts = [] # used when removing options from a question
+        self.option_inputs = []
+        self.options_layout = QtWidgets.QVBoxLayout()
+        for option in range(0, noOptions.value()):
             option_layout = QtWidgets.QHBoxLayout()
-            option_layout.addWidget(QtWidgets.QLabel(f"{option}:"))
+            option_layout.addWidget(QtWidgets.QLabel(str(chr(65+option))))
             input_field = QtWidgets.QLineEdit()
-            self.option_inputs[option] = input_field
+            self.option_inputs.append(input_field)
             option_layout.addWidget(input_field)
-            layout.addLayout(option_layout)
+            self.options_layouts.append(option_layout)
+            self.options_layout.addLayout(option_layout)
+        self.question_layout.addLayout(self.options_layout)
 
-        layout.addWidget(QtWidgets.QLabel("Correct Answers (check all that apply):"))
-        self.correct_checkboxes = {}
-        correct_layout = QtWidgets.QHBoxLayout()
+        self.question_layout.addWidget(QtWidgets.QLabel("Correct Answers (check all that apply):"))
+        self.correct_checkboxes = []
+        self.correct_widgets = [] # used when removing options from a question 
+        self.correct_layout = QtWidgets.QHBoxLayout()
         
-        for option in ['A', 'B', 'C', 'D']:
-            checkbox = QtWidgets.QCheckBox(option)
-            self.correct_checkboxes[option] = checkbox
-            correct_layout.addWidget(checkbox)
+        for option in range(0, noOptions.value()):
+            checkbox = QtWidgets.QCheckBox(str(chr(65+option)))
+            self.correct_checkboxes.append(checkbox)
+            self.correct_widgets.append(checkbox)
+            self.correct_layout.addWidget(checkbox)
         
-        layout.addLayout(correct_layout)
+        self.question_layout.addLayout(self.correct_layout)
 
         button_layout = QtWidgets.QHBoxLayout()
         
@@ -582,14 +595,52 @@ class QuestionDialog(QtWidgets.QDialog):
         button_layout.addWidget(add_btn)
         button_layout.addWidget(cancel_btn)
         
-        layout.addLayout(button_layout)
+        self.question_layout.addLayout(button_layout)
 
-        self.setLayout(layout)
+        self.setLayout(self.question_layout)
+
+    def noOptionsChanged(self, value):
+
+        #Remove options
+        while len(self.options_layouts) > int(value):
+           
+            while self.options_layouts[-1].count():
+                item = self.options_layouts[-1].takeAt(0)
+                if item is not None:
+                    widget = item.widget()
+                    if widget is not None:
+                        widget.hide()
+                        widget.setParent(None)
+                        widget.deleteLater()
+            self.options_layouts[-1].deleteLater()
+            self.options_layouts.pop()
+
+            self.option_inputs.pop()
+
+            self.correct_checkboxes.pop()
+
+            self.correct_widgets[-1].deleteLater()
+            self.correct_widgets.pop()
+
+        #Add options
+        while len(self.options_layouts) < value:
+            option_layout = QtWidgets.QHBoxLayout()
+            option_layout.addWidget(QtWidgets.QLabel(str(chr(65+len(self.options_layouts)))))
+            input_field = QtWidgets.QLineEdit()
+            self.option_inputs.append(input_field)
+            option_layout.addWidget(input_field)
+            self.options_layouts.append(option_layout)
+            self.options_layout.addLayout(option_layout)
+
+            checkbox = QtWidgets.QCheckBox(str(chr(65+len(self.options_layouts)-1)))
+            self.correct_checkboxes.append(checkbox)
+            self.correct_widgets.append(checkbox)
+            self.correct_layout.addWidget(checkbox)
 
     def get_question_data(self):
         question = self.question_input.toPlainText().strip()
-        options = {option: input_field.text().strip() for option, input_field in self.option_inputs.items()}
-        correct_answers = [option for option, checkbox in self.correct_checkboxes.items() if checkbox.isChecked()]
+        options = {chr(65 + i): input_field.text().strip() for i, input_field in enumerate(self.option_inputs)}
+        correct_answers = [chr(65+option) for option, checkbox in enumerate(self.correct_checkboxes) if checkbox.isChecked()]
         
         return {
             "question": question,
@@ -664,8 +715,8 @@ class ResultsDialog(QtWidgets.QDialog):
             question_header = QtWidgets.QLabel(f"{status_icon} Question {i}")
             question_header.setStyleSheet(f"font-weight: bold; color: {status_color};")
             question_layout.addWidget(question_header)
-            
-            user_answers = ", ".join(exercise.raspunsuri_user) if exercise.raspunsuri_user else "No answer"
+             
+            user_answers = ", ".join(exercise.raspunsuri_user)
             correct_answers = ", ".join(exercise.raspunsuri_corecte)
             
             answers_label = QtWidgets.QLabel(f"Your answer: {user_answers}\nCorrect: {correct_answers}")

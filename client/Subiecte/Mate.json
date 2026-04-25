@@ -1,0 +1,16 @@
+{
+    "titlu": "Mate",
+    "Exercitii": {
+        "1": {
+            "Enunt": "12",
+            "Raspunsuri": [
+                "A"
+            ],
+            "Options": {
+                "A": "12",
+                "B": "13",
+                "C": "14"
+            }
+        }
+    }
+}

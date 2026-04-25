@@ -12,8 +12,8 @@ class Exercitiu(QtWidgets.QWidget):
         self.enunt = enunt
         self.raspunsuri_corecte = rasp
         self.raspunsuri_user = []
-        self.options_text = options or {"A": "Option A", "B": "Option B", "C": "Option C", "D": "Option D"}
-
+        self.options_text = options
+  
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(500, 300)
@@ -30,9 +30,10 @@ class Exercitiu(QtWidgets.QWidget):
         self.options_layout = QtWidgets.QVBoxLayout()
 
         self.checkboxes = {}
-        for option in ['A', 'B', 'C', 'D']:
-            checkbox = QtWidgets.QCheckBox(f"{option}. {self.options_text.get(option, f'Option {option}')}")
-            checkbox.setObjectName(option)
+        for option in range(len(self.options_text)):
+            letter = chr(65 + option) 
+            checkbox = QtWidgets.QCheckBox(f"{letter}. {self.options_text.get(letter, f'Option {letter}')}")
+            checkbox.setObjectName(letter)
             checkbox.stateChanged.connect(self.update_user_answers)
             self.checkboxes[option] = checkbox
             self.options_layout.addWidget(checkbox)
@@ -44,7 +45,7 @@ class Exercitiu(QtWidgets.QWidget):
         self.raspunsuri_user = []
         for option, checkbox in self.checkboxes.items():
             if checkbox.isChecked():
-                self.raspunsuri_user.append(option)
+                self.raspunsuri_user.append(str(chr(option+65)))
 
     def get_score(self):
         if set(self.raspunsuri_user) == set(self.raspunsuri_corecte):
