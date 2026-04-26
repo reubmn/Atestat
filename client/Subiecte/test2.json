@@ -1,0 +1,38 @@
+{
+    "titlu": "test2",
+    "Exercitii": {
+        "1": {
+            "Enunt": "",
+            "Imagini": [
+                "Images/integrala.png",
+                "Images/integrala.png",
+                "Images/integrala.png",
+                "Images/integrala.png"
+            ],
+            "Raspunsuri": [
+                "A"
+            ],
+            "Options": {
+                "A": "",
+                "B": ""
+            }
+        },
+        "2": {
+            "Enunt": "",
+            "Imagini": [
+                "Images/integrala.png"
+            ],
+            "Raspunsuri": [],
+            "Options": {
+                "A": "",
+                "B": "",
+                "C": "",
+                "D": "",
+                "E": "",
+                "F": "",
+                "G": "",
+                "H": ""
+            }
+        }
+    }
+}

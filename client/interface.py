@@ -1,4 +1,5 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore, QtGui 
+from PIL import Image
 import objects as obj
 import auth
 import json
@@ -518,6 +519,7 @@ class TestCreatorDialog(QtWidgets.QDialog):
         for i, question in enumerate(self.questions, 1):
             test_data["Exercitii"][str(i)] = {
                 "Enunt": question["question"],
+                "Imagini" : question["images"],
                 "Raspunsuri": question["correct_answers"],
                 "Options": question["options"]
             }
@@ -539,19 +541,42 @@ class QuestionDialog(QtWidgets.QDialog):
         self.setupUi()
 
     def setupUi(self):
+    # Title
+       
         self.setWindowTitle("Add Question")
-        self.setFixedSize(500, 450)
+        self.setFixedSize(720, 500)
+        main_layout = QtWidgets.QVBoxLayout(self)
 
         self.question_layout = QtWidgets.QVBoxLayout()
+        scroll_widget = QtWidgets.QWidget()
+        scroll_area = QtWidgets.QScrollArea()
 
+        scroll_widget.setLayout(self.question_layout)
+        scroll_area.setWidget(scroll_widget)
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+        main_layout.addWidget(scroll_area)
+
+        #The actual question
+            #Text
         self.question_layout.addWidget(QtWidgets.QLabel("Question:"))
         self.question_input = QtWidgets.QTextEdit()
         self.question_input.setMaximumHeight(100)
         self.question_layout.addWidget(self.question_input)
 
+            #Images
+        new_image_button = QtWidgets.QPushButton("New Image")
+        new_image_button.clicked.connect(self.new_image_function)
+        self.image_layout = QtWidgets.QVBoxLayout()
+        self.image_layout.addWidget(new_image_button)
+      
+        self.question_layout.addLayout(self.image_layout)
+
 		#Number of options 
         self.question_layout.addWidget(QtWidgets.QLabel("Number of options")) 
         noOptions = QtWidgets.QSpinBox()
+        noOptions.wheelEvent = lambda event : None
         noOptions.setRange(2, 10)
         noOptions.valueChanged.connect(self.noOptionsChanged)
         self.question_layout.addWidget(noOptions)
@@ -575,7 +600,8 @@ class QuestionDialog(QtWidgets.QDialog):
         self.correct_checkboxes = []
         self.correct_widgets = [] # used when removing options from a question 
         self.correct_layout = QtWidgets.QHBoxLayout()
-        
+        self.images_paths = []        
+
         for option in range(0, noOptions.value()):
             checkbox = QtWidgets.QCheckBox(str(chr(65+option)))
             self.correct_checkboxes.append(checkbox)
@@ -597,7 +623,28 @@ class QuestionDialog(QtWidgets.QDialog):
         
         self.question_layout.addLayout(button_layout)
 
-        self.setLayout(self.question_layout)
+    def new_image_function(self, sender):
+        fileName = QtWidgets.QFileDialog.getOpenFileName(self,self.tr("Open Image"), "/", self.tr("Image Files (*.png *.jpg *.bmp)"))
+        fileName = fileName[0]
+        
+        img = Image.open(fileName)
+        i = len(fileName) - 1
+        while i>=0 and fileName[i] != '/':
+            i-=1
+        i+=1
+        fileName = fileName[i:]
+
+        img.save("Images/" + fileName)
+        self.images_paths.append("Images/" + fileName)
+
+        pic = QtWidgets.QLabel(self)
+        pic.setScaledContents(True) 
+        pic.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
+
+        pic.setPixmap(QtGui.QPixmap("Images/" + fileName))
+        pic.show() 
+        self.image_layout.addWidget(pic)
+
 
     def noOptionsChanged(self, value):
 
@@ -640,10 +687,11 @@ class QuestionDialog(QtWidgets.QDialog):
     def get_question_data(self):
         question = self.question_input.toPlainText().strip()
         options = {chr(65 + i): input_field.text().strip() for i, input_field in enumerate(self.option_inputs)}
-        correct_answers = [chr(65+option) for option, checkbox in enumerate(self.correct_checkboxes) if checkbox.isChecked()]
-        
+        correct_answers = [chr(65+option) for option, checkbox in enumerate(self.correct_checkboxes) if checkbox.isChecked()]       
+ 
         return {
             "question": question,
+            "images" : self.images_paths,
             "options": options,
             "correct_answers": correct_answers
         }

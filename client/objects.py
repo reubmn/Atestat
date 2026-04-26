@@ -7,12 +7,13 @@ import shutil
 import interface 
 
 class Exercitiu(QtWidgets.QWidget):
-    def __init__(self, enunt, rasp, options=None):
+    def __init__(self, enunt, rasp, img, options=None):
         super().__init__()
         self.enunt = enunt
         self.raspunsuri_corecte = rasp
         self.raspunsuri_user = []
         self.options_text = options
+        self.images = img
   
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -20,13 +21,27 @@ class Exercitiu(QtWidgets.QWidget):
 
         self.layout = QtWidgets.QVBoxLayout()
         Form.setLayout(self.layout)
-        
+       
+        # Enunt
+ 
         self.enunt_label = QtWidgets.QLabel(self.enunt)
         self.enunt_label.setObjectName("enunt")
         self.enunt_label.setWordWrap(True)
         self.enunt_label.setStyleSheet("font-size: 12px; padding: 10px; background: #f0f0f0; border-radius: 5px;")
         self.layout.addWidget(self.enunt_label)
         
+        # Imagini 
+
+        for i in self.images:
+            pic = QtWidgets.QLabel()
+            pic.setScaledContents(True)
+            pic.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
+            pic.setPixmap(QtGui.QPixmap(i))
+            pic.show()
+            self.layout.addWidget(pic)
+
+        # Optiuni
+
         self.options_layout = QtWidgets.QVBoxLayout()
 
         self.checkboxes = {}
@@ -54,8 +69,6 @@ class Exercitiu(QtWidgets.QWidget):
 
 last = []
         
-
-
 class Subiect(QtWidgets.QWidget):
     def __init__(self, path, stack, current_user):
         super().__init__()
@@ -72,9 +85,10 @@ class Subiect(QtWidgets.QWidget):
             for i in data["Exercitii"]:
                 ex = Exercitiu(
                     data["Exercitii"][i]["Enunt"], 
-                    data["Exercitii"][i]["Raspunsuri"],
+                    data["Exercitii"][i]["Raspunsuri"], 
+                    data["Exercitii"][i]["Imagini"],
                     data["Exercitii"][i].get("Options", {})
-                )
+               )
                 ex.raspunsuri_user = []
                 self.exercitii.append(ex)
 

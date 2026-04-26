@@ -1,0 +1,36 @@
+{
+    "titlu": "Testdetest",
+    "Exercitii": {
+        "1": {
+            "Enunt": "Care este raspunul corect?",
+            "Imagini": [
+                "Images/integrala.png"
+            ],
+            "Raspunsuri": [
+                "B"
+            ],
+            "Options": {
+                "A": "",
+                "B": "",
+                "C": "",
+                "D": ""
+            }
+        },
+        "2": {
+            "Enunt": "LALALA",
+            "Imagini": [],
+            "Raspunsuri": [
+                "A"
+            ],
+            "Options": {
+                "A": "",
+                "B": "",
+                "C": "",
+                "D": "",
+                "E": "",
+                "F": "",
+                "G": ""
+            }
+        }
+    }
+}

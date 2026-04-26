@@ -1,0 +1,36 @@
+{
+    "titlu": "Test",
+    "Exercitii": {
+        "1": {
+            "Enunt": "Care dintre urmatoarele este un limbaj de programare",
+            "Imagini": [],
+            "Raspunsuri": [
+                "A",
+                "C"
+            ],
+            "Options": {
+                "A": "C",
+                "B": "PowerPoint",
+                "C": "Python",
+                "D": "Bash"
+            }
+        },
+        "2": {
+            "Enunt": "Bifati raspunsul corect",
+            "Imagini": [
+                "Images/integrala.png"
+            ],
+            "Raspunsuri": [
+                "B"
+            ],
+            "Options": {
+                "A": "",
+                "B": "",
+                "C": "",
+                "D": "",
+                "E": "",
+                "F": ""
+            }
+        }
+    }
+}
