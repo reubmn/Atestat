@@ -544,7 +544,7 @@ class QuestionDialog(QtWidgets.QDialog):
     # Title
        
         self.setWindowTitle("Add Question")
-        self.setFixedSize(720, 500)
+        self.resize(720, 500)
         main_layout = QtWidgets.QVBoxLayout(self)
 
         self.question_layout = QtWidgets.QVBoxLayout()
